@@ -1,9 +1,9 @@
 import 'package:notes_crud_app/core/config/database_config.dart';
-import 'package:notes_crud_app/features/home/data/datasources/local_datasource.dart';
+import 'package:notes_crud_app/features/home/data/datasources/notes_local_datasource.dart';
 import 'package:notes_crud_app/features/home/data/models/note_model.dart';
 import 'package:sqflite/sqflite.dart';
 
-class LocalDatasourceImpl extends LocalDatasource {
+class NotesLocalDatasourceImpl extends NotesLocalDatasource {
   late Database _sqfliteDb;
 
   Future<void> _initDb() async {

@@ -20,8 +20,8 @@ void showSnackBar(
   );
 }
 
-void logMessage(String errorLocation, String message) {
-  log("[$errorLocation] - $message");
+void logMessage(String heading, String message) {
+  log("[$heading] - $message");
 }
 
 Widget showProgressIndicator() {

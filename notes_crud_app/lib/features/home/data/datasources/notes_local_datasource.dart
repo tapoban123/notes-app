@@ -1,6 +1,6 @@
 import 'package:notes_crud_app/features/home/data/models/note_model.dart';
 
-abstract class LocalDatasource {
+abstract class NotesLocalDatasource {
   Future<int>  insertNoteIntoDb(NoteModel note);
   Future<List<NoteModel>> fetchNotesFromDb();
   Future<int>  updateNoteInDb(NoteModel newNote);
