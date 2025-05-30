@@ -1,0 +1,1 @@
+# Coding Junior Internship Assignment
