@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notes_crud_app/core/theme/themes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,9 +12,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Notes App',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
+      debugShowCheckedModeBanner: false,
+      theme: CustomThemes.darkTheme(),
       home: const Scaffold(),
     );
   }
