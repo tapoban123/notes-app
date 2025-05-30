@@ -4,5 +4,5 @@ abstract class NotesRepository {
   Future<void> insertNoteIntoDb(NoteEntity note);
   Future<List<NoteEntity>?> fetchNotesFromDb();
   Future<void> updateNoteInDb(NoteEntity newNote);
-  Future<void> deleteNoteInDb(NoteEntity noteId);
+  Future<void> deleteNoteInDb(String noteId);
 }

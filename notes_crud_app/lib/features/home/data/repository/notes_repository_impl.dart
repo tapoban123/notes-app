@@ -32,18 +32,29 @@ class NotesRepositoryImpl extends NotesRepository {
       return notes;
     } catch (e) {
       logMessage("FETCH ERROR", e.toString());
+      return null;
     }
   }
 
   @override
-  Future<void> updateNoteInDb(NoteEntity newNote) {
-    // TODO: implement updateNoteInDb
-    throw UnimplementedError();
+  Future<void> updateNoteInDb(NoteEntity newNote) async {
+    try {
+      final response = await _notesLocalDatasource.updateNoteInDb(
+        NoteModel.fromMap(newNote.toMap()),
+      );
+      logMessage("NOTE UPDATED", response.toString());
+    } catch (e) {
+      logMessage("UPDATE ERROR", e.toString());
+    }
   }
 
   @override
-  Future<void> deleteNoteInDb(NoteEntity noteId) {
-    // TODO: implement deleteNoteInDb
-    throw UnimplementedError();
+  Future<void> deleteNoteInDb(String noteId) async {
+    try {
+      final response = await _notesLocalDatasource.deleteNoteInDb(noteId);
+      logMessage("NOTE DELETED", response.toString());
+    } catch (e) {
+      logMessage("NOTE DELETED", e.toString());
+    }
   }
 }
