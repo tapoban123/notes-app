@@ -1,0 +1,77 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:notes_crud_app/features/home/domain/entities/note_entity.dart';
+import 'package:notes_crud_app/features/home/presentation/widgets/note_textfield.dart';
+
+class AddOrEditNoteScreen extends StatefulWidget {
+  const AddOrEditNoteScreen({super.key});
+
+  @override
+  State<AddOrEditNoteScreen> createState() => _AddOrEditNoteScreenState();
+}
+
+class _AddOrEditNoteScreenState extends State<AddOrEditNoteScreen> {
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _contentController = TextEditingController();
+  late bool isEditNote;
+  late NoteEntity? noteData;
+
+  final GlobalKey<FormState> _formKey = GlobalKey();
+
+  @override
+  void initState() {
+    Map<String, dynamic> arguments = Get.arguments ?? {};
+    isEditNote = arguments["isEditNote"] ?? false;
+    noteData = arguments["noteData"];
+
+    if (noteData != null) {
+      _titleController.text = noteData!.title;
+      _contentController.text = noteData!.content;
+    }
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(isEditNote ? "Edit Note" : "Create New Note"),
+        centerTitle: true,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14.0).copyWith(top: 20),
+        child: Column(
+          children: [
+            Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  NoteTextfield(
+                    textController: _titleController,
+                    hintText: "Title",
+                  ),
+                  SizedBox(height: 10),
+                  NoteTextfield(
+                    textController: _contentController,
+                    hintText: "Content",
+                    maxLines: 5,
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 50),
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(double.infinity, 50),
+                backgroundColor: Colors.amber
+              ),
+              child: Text("Save",style: TextStyle(color: Colors.black,fontSize: 15),),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

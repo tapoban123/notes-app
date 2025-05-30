@@ -21,5 +21,13 @@ void showSnackBar(
 }
 
 void logMessage(String errorLocation, String message) {
-  log("Error at: $errorLocation - $message");
+  log("[$errorLocation] - $message");
+}
+
+Widget showProgressIndicator() {
+  return Center(child: CircularProgressIndicator());
+}
+
+void showProgressIndicatorDialog(BuildContext context) {
+  showDialog(context: context, builder: (context) => showProgressIndicator());
 }
