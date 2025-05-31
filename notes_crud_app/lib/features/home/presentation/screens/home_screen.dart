@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:notes_crud_app/core/utils/utils.dart';
 import 'package:notes_crud_app/features/home/presentation/controllers/deleted_notes_controller/deleted_notes_controller.dart';
 import 'package:notes_crud_app/features/home/presentation/controllers/notes_controller/notes_controller.dart';
-import 'package:notes_crud_app/features/home/presentation/controllers/theme_controller/theme_controller.dart';
+import 'package:notes_crud_app/features/home/presentation/controllers/theme_controller.dart';
 import 'package:notes_crud_app/features/home/presentation/widgets/confirm_dialog.dart';
 import 'package:notes_crud_app/features/home/presentation/widgets/note_tile.dart';
 import 'package:notes_crud_app/features/home/presentation/widgets/notes_search_delegate.dart';
@@ -25,9 +25,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     notesController = Get.find();
     deletedNotesController = Get.find();
-    notesController.fetchAllNotes(null);
-
     themeController = Get.put(ThemeController());
+    notesController.fetchAllNotes(null);
 
     super.initState();
   }
@@ -64,15 +63,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       Text("Theme"),
                       Obx(
                         () => Switch.adaptive(
-                          value:
-                              themeController.currentTheme.value ==
-                              Themes.dark.name,
+                          value: themeController.isDarkMode.value,
                           onChanged: (lightTheme) {
-                            if (lightTheme) {
-                              themeController.setTheme(Themes.light);
-                            } else {
-                              themeController.setTheme(Themes.dark);
-                            }
+                            themeController.toggleTheme();
                           },
                         ),
                       ),
@@ -193,45 +186,58 @@ class _SortOptionsState extends State<_SortOptions> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(bottom: 12),
-      child: ValueListenableBuilder(
-        valueListenable: selectedOption,
-        builder:
-            (context, selectedOptionValue, child) => Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                sortButton(
-                  index: 0,
-                  buttonName: "Title",
-                  selectedIndex: selectedOptionValue,
-                  onTap: () {
-                    selectedOption.value = 0;
-                    widget.notesController.fetchAllNotes("title");
-                  },
-                ),
-                sortButton(
-                  index: 1,
-                  buttonName: "Creation Time",
-                  selectedIndex: selectedOptionValue,
-                  onTap: () {
-                    selectedOption.value = 1;
+      child: GetX<ThemeController>(
+        init: ThemeController(),
+        builder: (themeController) {
+          final isDarkMode = themeController.isDarkMode.value;
 
-                    widget.notesController.fetchAllNotes("createdAt");
-                  },
-                ),
-                sortButton(
-                  index: 2,
-                  buttonName: "Reset",
-                  selectedIndex: selectedOptionValue,
-                  color: Colors.white60,
-                  icon: Icons.restore,
-                  onTap: () {
-                    selectedOption.value = null;
+          return ValueListenableBuilder(
+            valueListenable: selectedOption,
+            builder:
+                (context, selectedOptionValue, child) => Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    sortButton(
+                      index: 0,
+                      buttonName: "Title",
+                      isDarkMode: isDarkMode,
+                      selectedIndex: selectedOptionValue,
+                      onTap: () {
+                        selectedOption.value = 0;
+                        widget.notesController.fetchAllNotes("title");
+                      },
+                    ),
+                    sortButton(
+                      index: 1,
+                      buttonName: "Creation Time",
+                      isDarkMode: isDarkMode,
+                      selectedIndex: selectedOptionValue,
+                      onTap: () {
+                        selectedOption.value = 1;
 
-                    widget.notesController.fetchAllNotes(null);
-                  },
+                        widget.notesController.fetchAllNotes("createdAt");
+                      },
+                    ),
+                    sortButton(
+                      index: 2,
+                      buttonName: "Reset",
+                      isDarkMode: isDarkMode,
+                      selectedIndex: selectedOptionValue,
+                      color:
+                          isDarkMode
+                              ? Colors.white60
+                              : Colors.black87,
+                      icon: Icons.restore,
+                      onTap: () {
+                        selectedOption.value = null;
+
+                        widget.notesController.fetchAllNotes(null);
+                      },
+                    ),
+                  ],
                 ),
-              ],
-            ),
+          );
+        },
       ),
     );
   }
@@ -239,6 +245,7 @@ class _SortOptionsState extends State<_SortOptions> {
   Widget sortButton({
     required int index,
     required String buttonName,
+    required bool isDarkMode,
     int? selectedIndex,
     IconData icon = Icons.sort,
     Color? color,
@@ -252,16 +259,30 @@ class _SortOptionsState extends State<_SortOptions> {
             buttonName,
             style: TextStyle(
               color:
-                  color ??
-                  (selectedIndex == index ? Colors.white : Colors.white54),
+                  isDarkMode
+                      ? (color ??
+                          (selectedIndex == index
+                              ? Colors.white
+                              : Colors.white54))
+                      : (color ??
+                          (selectedIndex == index
+                              ? Colors.black
+                              : Colors.black54)),
             ),
           ),
           SizedBox(width: 5),
           Icon(
             icon,
             color:
-                color ??
-                (selectedIndex == index ? Colors.white : Colors.white54),
+                isDarkMode
+                    ? (color ??
+                        (selectedIndex == index
+                            ? Colors.white
+                            : Colors.white54))
+                    : (color ??
+                        (selectedIndex == index
+                            ? Colors.black
+                            : Colors.black54)),
           ),
         ],
       ),

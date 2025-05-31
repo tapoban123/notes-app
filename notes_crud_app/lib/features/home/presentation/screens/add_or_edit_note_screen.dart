@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:notes_crud_app/core/utils/utils.dart';
 import 'package:notes_crud_app/features/home/domain/entities/note_entity.dart';
 import 'package:notes_crud_app/features/home/presentation/controllers/notes_controller/notes_controller.dart';
+import 'package:notes_crud_app/features/home/presentation/controllers/theme_controller.dart';
 import 'package:notes_crud_app/features/home/presentation/widgets/note_textfield.dart';
 import 'package:uuid/uuid.dart';
 
@@ -56,12 +57,23 @@ class _AddOrEditNoteScreenState extends State<AddOrEditNoteScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             noteData != null && noteData!.updatedAt != null
-                ? Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: Text(
-                    "Last Modifed on ${formatDate(DateTime.fromMillisecondsSinceEpoch(noteData!.updatedAt!))} at ${formatTime(DateTime.fromMillisecondsSinceEpoch(noteData!.updatedAt!))}",
-                    style: dateTimeStyle,
-                  ),
+                ? GetX<ThemeController>(
+                  builder: (themeController) {
+                    final isDarkMode = themeController.isDarkMode.value;
+
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: Text(
+                        "Last Modifed on ${formatDate(DateTime.fromMillisecondsSinceEpoch(noteData!.updatedAt!))} at ${formatTime(DateTime.fromMillisecondsSinceEpoch(noteData!.updatedAt!))}",
+                        style: dateTimeStyle.copyWith(
+                          color:
+                              isDarkMode
+                                  ? Colors.white.withValues(alpha: 0.5)
+                                  : Colors.black.withValues(alpha: 0.5),
+                        ),
+                      ),
+                    );
+                  },
                 )
                 : SizedBox.shrink(),
             Form(
@@ -84,22 +96,42 @@ class _AddOrEditNoteScreenState extends State<AddOrEditNoteScreen> {
             noteData != null
                 ? Padding(
                   padding: EdgeInsets.only(top: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        formatDate(
-                          DateTime.fromMillisecondsSinceEpoch(noteData!.createdAt),
-                        ),
-                        style: dateTimeStyle,
-                      ),
-                      Text(
-                        formatTime(
-                          DateTime.fromMillisecondsSinceEpoch(noteData!.createdAt),
-                        ),
-                        style: dateTimeStyle,
-                      ),
-                    ],
+                  child: GetX<ThemeController>(
+                    builder: (themeController) {
+                      final isDarkMode = themeController.isDarkMode.value;
+
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            formatDate(
+                              DateTime.fromMillisecondsSinceEpoch(
+                                noteData!.createdAt,
+                              ),
+                            ),
+                            style: dateTimeStyle.copyWith(
+                              color:
+                                  isDarkMode
+                                      ? Colors.white.withValues(alpha: 0.5)
+                                      : Colors.black.withValues(alpha: 0.5),
+                            ),
+                          ),
+                          Text(
+                            formatTime(
+                              DateTime.fromMillisecondsSinceEpoch(
+                                noteData!.createdAt,
+                              ),
+                            ),
+                            style: dateTimeStyle.copyWith(
+                              color:
+                                  isDarkMode
+                                      ? Colors.white.withValues(alpha: 0.5)
+                                      : Colors.black.withValues(alpha: 0.5),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 )
                 : SizedBox.shrink(),

@@ -15,10 +15,7 @@ class NoteTextfield extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: textController,
-      decoration: InputDecoration(
-        hintText: hintText,
-        hintStyle: TextStyle(color: Colors.white.withValues(alpha: 0.4)),
-      ),
+      decoration: InputDecoration(hintText: hintText),
       onTapOutside: (event) {
         FocusManager.instance.primaryFocus?.unfocus();
       },
