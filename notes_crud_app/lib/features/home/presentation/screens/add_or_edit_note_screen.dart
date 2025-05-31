@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notes_crud_app/core/utils/utils.dart';
 import 'package:notes_crud_app/features/home/domain/entities/note_entity.dart';
-import 'package:notes_crud_app/features/home/presentation/controllers/notes_controller.dart';
+import 'package:notes_crud_app/features/home/presentation/controllers/notes_controller/notes_controller.dart';
 import 'package:notes_crud_app/features/home/presentation/widgets/note_textfield.dart';
 import 'package:uuid/uuid.dart';
 

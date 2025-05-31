@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notes_crud_app/core/utils/utils.dart';
-import 'package:notes_crud_app/features/home/presentation/controllers/notes_controller.dart';
+import 'package:notes_crud_app/features/home/presentation/controllers/notes_controller/notes_controller.dart';
+import 'package:notes_crud_app/features/home/presentation/controllers/theme_controller/theme_controller.dart';
 import 'package:notes_crud_app/features/home/presentation/widgets/note_tile.dart';
 import 'package:notes_crud_app/features/home/presentation/widgets/notes_search_delegate.dart';
 import 'package:notes_crud_app/routes.dart';
@@ -15,11 +16,14 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late NotesController notesController;
+  late ThemeController themeController;
 
   @override
   void initState() {
     notesController = Get.find();
     notesController.fetchAllNotes(null);
+
+    themeController = Get.put(ThemeController());
 
     super.initState();
   }
@@ -40,7 +44,35 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             icon: Icon(Icons.search),
           ),
-          IconButton(onPressed: () {}, icon: Icon(Icons.more_vert)),
+          PopupMenuButton(
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem(child: Text("Deleted Notes"), onTap: () {}),
+                PopupMenuItem(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Theme"),
+                      Obx(
+                        () => Switch.adaptive(
+                          value:
+                              themeController.currentTheme.value ==
+                              Themes.dark.name,
+                          onChanged: (lightTheme) {
+                            if (lightTheme) {
+                              themeController.setTheme(Themes.light);
+                            } else {
+                              themeController.setTheme(Themes.dark);
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ];
+            },
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
