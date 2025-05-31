@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:notes_crud_app/features/home/domain/entities/note_entity.dart';
-import 'package:notes_crud_app/features/home/domain/usecases/delete_note_in_db.dart';
-import 'package:notes_crud_app/features/home/domain/usecases/fetch_all_notes_from_db.dart';
-import 'package:notes_crud_app/features/home/domain/usecases/insert_note_into_db.dart';
-import 'package:notes_crud_app/features/home/domain/usecases/update_note_in_db.dart';
+import 'package:notes_crud_app/features/home/domain/usecases/notes_usecases/delete_note_in_db.dart';
+import 'package:notes_crud_app/features/home/domain/usecases/notes_usecases/fetch_all_notes_from_db.dart';
+import 'package:notes_crud_app/features/home/domain/usecases/notes_usecases/insert_note_into_db.dart';
+import 'package:notes_crud_app/features/home/domain/usecases/notes_usecases/update_note_in_db.dart';
 
 class NotesController extends GetxController {
   final InsertNoteIntoDb _insertNoteIntoDb;

@@ -41,4 +41,11 @@ class DeletedNotesLocalDatasourceImpl extends DeletedNotesLocalDatasource {
 
     return response;
   }
+
+  @override
+  Future<int> deleteAllDeletedNotes() async {
+    await _initDb();
+    final response = await _notesDb.delete(TableNames.deletedNotesTable.table);
+    return response;
+  }
 }
