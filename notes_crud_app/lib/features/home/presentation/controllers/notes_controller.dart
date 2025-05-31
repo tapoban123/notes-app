@@ -23,6 +23,7 @@ class NotesController extends GetxController {
 
   final RxList<NoteEntity> notes = RxList([]);
   final isLoading = RxBool(false);
+  final fetchingNotes = RxBool(false);
 
   void createNote(NoteEntity note) async {
     isLoading.value = true;
@@ -39,14 +40,15 @@ class NotesController extends GetxController {
   }
 
   void fetchAllNotes() async {
-    isLoading.value = true;
+    fetchingNotes.value = true;
     final fetchNotes = await _fetchAllNotesFromDb.call();
     notes.value = fetchNotes ?? [];
-    isLoading.value = false;
+    fetchingNotes.value = false;
   }
 
   void updateNote(NoteEntity newNote) async {
     isLoading.value = true;
     await _updateNoteInDb.call(newNote);
+    isLoading.value = false;
   }
 }

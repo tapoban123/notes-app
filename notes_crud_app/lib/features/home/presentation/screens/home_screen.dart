@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:notes_crud_app/features/home/domain/entities/note_entity.dart';
+import 'package:notes_crud_app/core/utils/utils.dart';
+import 'package:notes_crud_app/features/home/presentation/controllers/notes_controller.dart';
+import 'package:notes_crud_app/features/home/presentation/widgets/note_tile.dart';
 import 'package:notes_crud_app/routes.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -8,6 +10,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final NotesController notesController = Get.find();
+
     return Scaffold(
       appBar: AppBar(title: Text("Notes"), centerTitle: true),
       floatingActionButton: FloatingActionButton(
@@ -17,31 +21,22 @@ class HomeScreen extends StatelessWidget {
         shape: CircleBorder(),
         child: Icon(Icons.add),
       ),
-      body: Column(
-        children: [
-          ListTile(
-            title: Text("Hello World"),
-            trailing: IconButton(
-              onPressed: () {
-                Get.toNamed(
-                  RouteNames.editOrAddScreen.route,
-                  arguments: {
-                    "isEditNote": true,
-                    "noteData": NoteEntity(
-                      noteId: "123",
-                      title: "HEllo World",
-                      content: "Code a lot",
-                      createdAt: 2,
-                      updatedAt: 2,
-                    ),
-                  },
-                );
-              },
-              icon: Icon(Icons.edit),
-            ),
-          ),
-        ],
-      ),
+      body: Obx(() {
+        if (notesController.isLoading.value) {
+          showProgressIndicator();
+        }
+        if (notesController.notes.isEmpty) {
+          return Text("You do not have any notes.");
+        }
+        return ListView.builder(
+          itemCount: notesController.notes.length,
+          itemBuilder: (context, index) {
+            final note = notesController.notes[index];
+
+            return NoteTile(noteData: note);
+          },
+        );
+      }),
     );
   }
 }
