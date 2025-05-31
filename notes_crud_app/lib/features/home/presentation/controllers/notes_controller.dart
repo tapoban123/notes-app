@@ -22,26 +22,21 @@ class NotesController extends GetxController {
        _deleteNoteInDb = deleteNoteInDb;
 
   final RxList<NoteEntity> notes = <NoteEntity>[].obs;
-  final isLoading = RxBool(false);
   final fetchingNotes = RxBool(false);
 
   void createNote(NoteEntity note) async {
-    isLoading.value = true;
-    await _insertNoteIntoDb.call(note);
+    _insertNoteIntoDb.call(note);
     final List<NoteEntity> currentNotes = List.from(notes);
     currentNotes.add(note);
     notes.value = currentNotes;
-    isLoading.value = false;
   }
 
   Future<void> deleteNote(String noteId) async {
-    isLoading.value = true;
-    await _deleteNoteInDb.call(noteId);
+    _deleteNoteInDb.call(noteId);
     final List<NoteEntity> currentNotes = List.from(notes);
     currentNotes.removeWhere((element) => element.noteId == noteId);
 
     notes.value = currentNotes;
-    isLoading.value = false;
   }
 
   void fetchAllNotes() async {
@@ -52,8 +47,7 @@ class NotesController extends GetxController {
   }
 
   void updateNote(NoteEntity updatedNote) async {
-    isLoading.value = true;
-    await _updateNoteInDb.call(updatedNote);
+    _updateNoteInDb.call(updatedNote);
     final List<NoteEntity> currentNotes = List.from(notes);
     final index = currentNotes.indexWhere(
       (element) => element.noteId == updatedNote.noteId,
@@ -61,6 +55,5 @@ class NotesController extends GetxController {
     currentNotes[index] = updatedNote;
 
     notes.value = currentNotes;
-    isLoading.value = false;
   }
 }

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:notes_crud_app/core/utils/utils.dart';
 import 'package:notes_crud_app/features/home/presentation/controllers/notes_controller.dart';
 import 'package:notes_crud_app/features/home/presentation/widgets/note_tile.dart';
+import 'package:notes_crud_app/features/home/presentation/widgets/notes_search_delegate.dart';
 import 'package:notes_crud_app/routes.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -26,7 +27,22 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Notes"), centerTitle: true),
+      appBar: AppBar(
+        title: Text("Notes"),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: NotesSearchDelegate(allNotes: notesController.notes),
+              );
+            },
+            icon: Icon(Icons.search),
+          ),
+          IconButton(onPressed: () {}, icon: Icon(Icons.more_vert)),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Get.toNamed(RouteNames.editOrAddScreen.route);
@@ -35,9 +51,6 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Icon(Icons.add),
       ),
       body: Obx(() {
-        // if (notesController.isLoading.value) {
-        //   showProgressIndicator();
-        // }
         if (notesController.fetchingNotes.value) {
           return showProgressIndicator();
         }
