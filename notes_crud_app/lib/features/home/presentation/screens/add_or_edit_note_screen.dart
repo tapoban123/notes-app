@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notes_crud_app/features/home/domain/entities/note_entity.dart';
+import 'package:notes_crud_app/features/home/presentation/controllers/notes_controller.dart';
 import 'package:notes_crud_app/features/home/presentation/widgets/note_textfield.dart';
+import 'package:uuid/uuid.dart';
 
 class AddOrEditNoteScreen extends StatefulWidget {
   const AddOrEditNoteScreen({super.key});
@@ -15,11 +17,14 @@ class _AddOrEditNoteScreenState extends State<AddOrEditNoteScreen> {
   final TextEditingController _contentController = TextEditingController();
   late bool isEditNote;
   late NoteEntity? noteData;
+  late NotesController _notesController;
 
   final GlobalKey<FormState> _formKey = GlobalKey();
 
   @override
   void initState() {
+    _notesController = Get.find();
+
     Map<String, dynamic> arguments = Get.arguments ?? {};
     isEditNote = arguments["isEditNote"] ?? false;
     noteData = arguments["noteData"];
@@ -62,12 +67,25 @@ class _AddOrEditNoteScreenState extends State<AddOrEditNoteScreen> {
             ),
             SizedBox(height: 50),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  final note = NoteEntity(
+                    noteId: Uuid().v4(),
+                    title: _titleController.text,
+                    content: _contentController.text,
+                    createdAt: DateTime.now().millisecondsSinceEpoch,
+                  );
+                  _notesController.createNote(note);
+                }
+              },
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(double.infinity, 50),
-                backgroundColor: Colors.amber
+                backgroundColor: Colors.amber,
               ),
-              child: Text("Save",style: TextStyle(color: Colors.black,fontSize: 15),),
+              child: Text(
+                "Save",
+                style: TextStyle(color: Colors.black, fontSize: 15),
+              ),
             ),
           ],
         ),

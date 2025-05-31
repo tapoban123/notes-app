@@ -16,6 +16,7 @@ class NotesLocalDatasourceImpl extends NotesLocalDatasource {
     final response = await _sqfliteDb.query(TableNames.notesTable.table);
     final List<NoteModel> notes =
         response.map((note) => NoteModel.fromMap(note)).toList();
+    print(notes);
 
     return notes;
   }
@@ -24,9 +25,12 @@ class NotesLocalDatasourceImpl extends NotesLocalDatasource {
   Future<int> insertNoteIntoDb(NoteModel note) async {
     await _initDb();
 
+    final newNote = note.toMap();
+    newNote.remove("updatedAt");
+
     final response = await _sqfliteDb.insert(
       TableNames.notesTable.table,
-      note.toMap(),
+      newNote,
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
 

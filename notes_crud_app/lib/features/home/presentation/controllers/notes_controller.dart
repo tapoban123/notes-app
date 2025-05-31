@@ -43,6 +43,7 @@ class NotesController extends GetxController {
     fetchingNotes.value = true;
     final fetchNotes = await _fetchAllNotesFromDb.call();
     notes.value = fetchNotes ?? [];
+    print(notes);
     fetchingNotes.value = false;
   }
 

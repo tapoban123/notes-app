@@ -21,5 +21,6 @@ final routes = [
   GetPage(
     name: RouteNames.editOrAddScreen.route,
     page: () => AddOrEditNoteScreen(),
+    binding: NotesBinding(),
   ),
 ];
