@@ -17,7 +17,7 @@ class NoteTile extends StatelessWidget {
             SizedBox(
               width: 220,
               child: Text(
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+                noteData.title,
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 overflow: TextOverflow.ellipsis,
               ),
@@ -30,30 +30,21 @@ class NoteTile extends StatelessWidget {
                   onTap: () {
                     Get.toNamed(
                       RouteNames.editOrAddScreen.route,
-                      arguments: {
-                        "isEditNote": true,
-                        "noteData": NoteEntity(
-                          noteId: "123",
-                          title: "HEllo World",
-                          content: "Code a lot",
-                          createdAt: 2,
-                          updatedAt: 2,
-                        ),
-                      },
+                      arguments: {"isEditNote": true, "noteData": noteData},
                     );
                   },
                 ),
-                _NoteTileButton(
-                  icon: Icons.delete,
-                  iconColor: Colors.red,
-                  onTap: () {},
-                ),
+                // _NoteTileButton(
+                //   icon: Icons.delete,
+                //   iconColor: Colors.red,
+                //   onTap: () {},
+                // ),
               ],
             ),
           ],
         ),
         subtitle: Text(
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla convallis tempor egestas. Duis et sapien eget velit ultricies maximus eu varius risus. Proin suscipit placerat diam, eleifend blandit velit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean tristique ultricies ante, sed egestas ex molestie id. Fusce congue convallis ante ut volutpat. Nulla congue lectus nec feugiat blandit. Cras pellentesque lorem sem, a viverra sapien auctor et. Aenean aliquet posuere neque et ullamcorper. Nullam rutrum, lorem sed iaculis finibus, ipsum ante vehicula purus, nec molestie dolor purus at lorem. Integer consequat bibendum metus non placerat. Nulla ut lacinia enim. Vivamus ullamcorper lorem eros, commodo porta velit porta et. Duis condimentum nec ligula in blandit. Sed eu faucibus turpis, at maximus leo. Duis pulvinar tristique erat eget pretium",
+          noteData.content,
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
         ),

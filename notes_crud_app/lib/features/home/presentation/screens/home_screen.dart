@@ -35,24 +35,61 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Icon(Icons.add),
       ),
       body: Obx(() {
-        if (notesController.isLoading.value) {
-          showProgressIndicator();
-        }
+        // if (notesController.isLoading.value) {
+        //   showProgressIndicator();
+        // }
         if (notesController.fetchingNotes.value) {
           return showProgressIndicator();
         }
         if (notesController.notes.isEmpty) {
           return Center(child: Text("You do not have any notes."));
         }
-        return ListView.builder(
-          itemCount: notesController.notes.length,
-          itemBuilder: (context, index) {
+        return AnimatedList(
+          initialItemCount: notesController.notes.length,
+          itemBuilder: (context, index, animation) {
             final note = notesController.notes[index];
 
-            return NoteTile(noteData: note);
+            return Dismissible(
+              key: Key(note.noteId),
+
+              confirmDismiss: (direction) async {
+                return await showDialog(
+                  context: context,
+                  builder: (context) => showConfirmDeleteDialog(),
+                );
+              },
+              onDismissed: (direction) {
+                notesController.deleteNote(note.noteId);
+                showSnackBar(context, message: "Your note has been deleted.");
+              },
+              child: NoteTile(noteData: note),
+            );
           },
         );
       }),
+    );
+  }
+
+  Widget showConfirmDeleteDialog() {
+    return AlertDialog(
+      title: Text("Delete Note"),
+      content: Text("Are you sure you want to delete this note?"),
+      actions: [
+        TextButton(
+          onPressed: () async {
+            Get.back(result: true);
+          },
+          style: TextButton.styleFrom(backgroundColor: Colors.red),
+          child: Text("Delete", style: TextStyle(color: Colors.white)),
+        ),
+        TextButton(
+          onPressed: () {
+            Get.back(result: false);
+          },
+          style: TextButton.styleFrom(backgroundColor: Colors.blue),
+          child: Text("Cancel", style: TextStyle(color: Colors.white)),
+        ),
+      ],
     );
   }
 }

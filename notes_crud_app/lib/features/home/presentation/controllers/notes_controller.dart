@@ -26,17 +26,17 @@ class NotesController extends GetxController {
   final fetchingNotes = RxBool(false);
 
   void createNote(NoteEntity note) async {
-    isLoading.value = true;
+    // isLoading.value = true;
     await _insertNoteIntoDb.call(note);
     notes.add(note);
-    isLoading.value = false;
+    // isLoading.value = false;
   }
 
   void deleteNote(String noteId) async {
-    isLoading.value = true;
+    // isLoading.value = true;
     await _deleteNoteInDb.call(noteId);
     notes.removeWhere((element) => element.noteId == noteId);
-    isLoading.value = false;
+    // isLoading.value = false;
   }
 
   void fetchAllNotes() async {

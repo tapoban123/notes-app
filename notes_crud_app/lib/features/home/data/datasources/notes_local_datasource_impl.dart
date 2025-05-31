@@ -43,7 +43,7 @@ class NotesLocalDatasourceImpl extends NotesLocalDatasource {
 
     final response = await _sqfliteDb.update(
       TableNames.notesTable.table,
-      where: "note_id = ?",
+      where: "noteId = ?",
       whereArgs: [newNote.noteId],
       newNote.toMap(),
     );
@@ -57,7 +57,7 @@ class NotesLocalDatasourceImpl extends NotesLocalDatasource {
 
     final response = await _sqfliteDb.delete(
       TableNames.notesTable.table,
-      where: "note_id = ?",
+      where: "noteId = ?",
       whereArgs: [noteId],
     );
 

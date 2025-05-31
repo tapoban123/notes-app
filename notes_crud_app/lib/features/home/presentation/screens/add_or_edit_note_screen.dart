@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:notes_crud_app/core/utils/utils.dart';
 import 'package:notes_crud_app/features/home/domain/entities/note_entity.dart';
 import 'package:notes_crud_app/features/home/presentation/controllers/notes_controller.dart';
 import 'package:notes_crud_app/features/home/presentation/widgets/note_textfield.dart';
@@ -67,7 +68,7 @@ class _AddOrEditNoteScreenState extends State<AddOrEditNoteScreen> {
             ),
             SizedBox(height: 50),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (_formKey.currentState!.validate()) {
                   final note = NoteEntity(
                     noteId: Uuid().v4(),
@@ -75,7 +76,9 @@ class _AddOrEditNoteScreenState extends State<AddOrEditNoteScreen> {
                     content: _contentController.text,
                     createdAt: DateTime.now().millisecondsSinceEpoch,
                   );
+
                   _notesController.createNote(note);
+                  Get.back();
                 }
               },
               style: ElevatedButton.styleFrom(
