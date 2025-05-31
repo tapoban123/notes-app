@@ -19,7 +19,6 @@ class NotesLocalDatasourceImpl extends NotesLocalDatasource {
     );
     final List<NoteModel> notes =
         response.map((note) => NoteModel.fromMap(note)).toList();
-    print(notes);
 
     return notes;
   }
