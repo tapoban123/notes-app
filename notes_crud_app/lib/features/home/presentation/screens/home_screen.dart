@@ -42,29 +42,58 @@ class _HomeScreenState extends State<HomeScreen> {
           return showProgressIndicator();
         }
         if (notesController.notes.isEmpty) {
-          return Center(child: Text("You do not have any notes."));
+          return Center(
+            child: Text(
+              "You do not have any notes.",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          );
         }
-        return AnimatedList(
-          initialItemCount: notesController.notes.length,
-          itemBuilder: (context, index, animation) {
-            final note = notesController.notes[index];
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          child: ListView.builder(
+            itemCount: notesController.notes.length,
+            itemBuilder: (context, index) {
+              final note = notesController.notes[index];
 
-            return Dismissible(
-              key: Key(note.noteId),
+              return Dismissible(
+                key: Key(note.noteId),
+                background: SizedBox(),
+                direction: DismissDirection.endToStart,
+                secondaryBackground: Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  alignment: Alignment.centerRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 16.0),
+                    child: Icon(Icons.delete, color: Colors.red),
+                  ),
+                ),
 
-              confirmDismiss: (direction) async {
-                return await showDialog(
-                  context: context,
-                  builder: (context) => showConfirmDeleteDialog(),
-                );
-              },
-              onDismissed: (direction) {
-                notesController.deleteNote(note.noteId);
-                showSnackBar(context, message: "Your note has been deleted.");
-              },
-              child: NoteTile(noteData: note),
-            );
-          },
+                confirmDismiss: (direction) async {
+                  return await showDialog(
+                    context: context,
+                    builder: (context) => showConfirmDeleteDialog(),
+                  );
+                },
+                onDismissed: (direction) async {
+                  await notesController.deleteNote(note.noteId);
+
+                  if (context.mounted) {
+                    showSnackBar(
+                      context,
+                      message: "Your note has been deleted.",
+                    );
+                  }
+                },
+                child: NoteTile(noteData: note),
+              );
+            },
+          ),
         );
       }),
     );

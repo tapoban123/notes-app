@@ -68,16 +68,27 @@ class _AddOrEditNoteScreenState extends State<AddOrEditNoteScreen> {
             ),
             SizedBox(height: 50),
             ElevatedButton(
-              onPressed: () async {
+              onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  final note = NoteEntity(
-                    noteId: Uuid().v4(),
-                    title: _titleController.text,
-                    content: _contentController.text,
-                    createdAt: DateTime.now().millisecondsSinceEpoch,
-                  );
+                  if (isEditNote) {
+                    final updatedNote = NoteEntity(
+                      noteId: noteData!.noteId,
+                      title: _titleController.text,
+                      content: _contentController.text,
+                      createdAt: noteData!.createdAt,
+                      updatedAt: DateTime.now().millisecondsSinceEpoch,
+                    );
+                    _notesController.updateNote(updatedNote);
+                  } else {
+                    final note = NoteEntity(
+                      noteId: Uuid().v4(),
+                      title: _titleController.text,
+                      content: _contentController.text,
+                      createdAt: DateTime.now().millisecondsSinceEpoch,
+                    );
 
-                  _notesController.createNote(note);
+                    _notesController.createNote(note);
+                  }
                   Get.back();
                 }
               },

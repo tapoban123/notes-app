@@ -21,35 +21,46 @@ class NotesController extends GetxController {
        _updateNoteInDb = updateNoteInDb,
        _deleteNoteInDb = deleteNoteInDb;
 
-  final RxList<NoteEntity> notes = RxList([]);
+  final RxList<NoteEntity> notes = <NoteEntity>[].obs;
   final isLoading = RxBool(false);
   final fetchingNotes = RxBool(false);
 
   void createNote(NoteEntity note) async {
-    // isLoading.value = true;
+    isLoading.value = true;
     await _insertNoteIntoDb.call(note);
-    notes.add(note);
-    // isLoading.value = false;
+    final List<NoteEntity> currentNotes = List.from(notes);
+    currentNotes.add(note);
+    notes.value = currentNotes;
+    isLoading.value = false;
   }
 
-  void deleteNote(String noteId) async {
-    // isLoading.value = true;
+  Future<void> deleteNote(String noteId) async {
+    isLoading.value = true;
     await _deleteNoteInDb.call(noteId);
-    notes.removeWhere((element) => element.noteId == noteId);
-    // isLoading.value = false;
+    final List<NoteEntity> currentNotes = List.from(notes);
+    currentNotes.removeWhere((element) => element.noteId == noteId);
+
+    notes.value = currentNotes;
+    isLoading.value = false;
   }
 
   void fetchAllNotes() async {
     fetchingNotes.value = true;
     final fetchNotes = await _fetchAllNotesFromDb.call();
     notes.value = fetchNotes ?? [];
-    print(notes);
     fetchingNotes.value = false;
   }
 
-  void updateNote(NoteEntity newNote) async {
+  void updateNote(NoteEntity updatedNote) async {
     isLoading.value = true;
-    await _updateNoteInDb.call(newNote);
+    await _updateNoteInDb.call(updatedNote);
+    final List<NoteEntity> currentNotes = List.from(notes);
+    final index = currentNotes.indexWhere(
+      (element) => element.noteId == updatedNote.noteId,
+    );
+    currentNotes[index] = updatedNote;
+
+    notes.value = currentNotes;
     isLoading.value = false;
   }
 }

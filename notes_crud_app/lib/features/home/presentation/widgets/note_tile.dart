@@ -10,6 +10,8 @@ class NoteTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: EdgeInsets.symmetric(horizontal: 0).copyWith(top: 0, bottom: 10),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: ListTile(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -22,24 +24,15 @@ class NoteTile extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            Row(
-              children: [
-                _NoteTileButton(
-                  icon: Icons.edit,
-                  iconColor: Colors.blue,
-                  onTap: () {
-                    Get.toNamed(
-                      RouteNames.editOrAddScreen.route,
-                      arguments: {"isEditNote": true, "noteData": noteData},
-                    );
-                  },
-                ),
-                // _NoteTileButton(
-                //   icon: Icons.delete,
-                //   iconColor: Colors.red,
-                //   onTap: () {},
-                // ),
-              ],
+            _NoteTileButton(
+              icon: Icons.edit,
+              iconColor: Colors.blue,
+              onTap: () {
+                Get.toNamed(
+                  RouteNames.editOrAddScreen.route,
+                  arguments: {"isEditNote": true, "noteData": noteData},
+                );
+              },
             ),
           ],
         ),
@@ -48,6 +41,7 @@ class NoteTile extends StatelessWidget {
           maxLines: 3,
           overflow: TextOverflow.ellipsis,
         ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
   }

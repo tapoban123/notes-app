@@ -21,9 +21,13 @@ class CustomThemes {
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.white, width: 3),
         ),
-        errorBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white),
+        focusedErrorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.red),
         ),
+        errorBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.red),
+        ),
+        errorStyle: TextStyle(color: Colors.red),
       ),
     );
   }
