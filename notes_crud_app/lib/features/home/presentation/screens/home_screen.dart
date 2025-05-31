@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:notes_crud_app/core/utils/utils.dart';
+import 'package:notes_crud_app/features/home/presentation/controllers/deleted_notes_controller/deleted_notes_controller.dart';
 import 'package:notes_crud_app/features/home/presentation/controllers/notes_controller/notes_controller.dart';
 import 'package:notes_crud_app/features/home/presentation/controllers/theme_controller/theme_controller.dart';
+import 'package:notes_crud_app/features/home/presentation/widgets/confirm_dialog.dart';
 import 'package:notes_crud_app/features/home/presentation/widgets/note_tile.dart';
 import 'package:notes_crud_app/features/home/presentation/widgets/notes_search_delegate.dart';
 import 'package:notes_crud_app/routes.dart';
@@ -16,11 +18,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late NotesController notesController;
+  late DeletedNotesController deletedNotesController;
   late ThemeController themeController;
 
   @override
   void initState() {
     notesController = Get.find();
+    deletedNotesController = Get.find();
     notesController.fetchAllNotes(null);
 
     themeController = Get.put(ThemeController());
@@ -47,7 +51,12 @@ class _HomeScreenState extends State<HomeScreen> {
           PopupMenuButton(
             itemBuilder: (context) {
               return [
-                PopupMenuItem(child: Text("Deleted Notes"), onTap: () {}),
+                PopupMenuItem(
+                  child: Text("Deleted Notes"),
+                  onTap: () {
+                    Get.toNamed(RouteNames.deletedNotesScreen.route);
+                  },
+                ),
                 PopupMenuItem(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -129,13 +138,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           builder: (context) => showConfirmDeleteDialog(),
                         );
                       },
-                      onDismissed: (direction) async {
-                        await notesController.deleteNote(note.noteId);
+                      onDismissed: (direction) {
+                        deletedNotesController.addToDeletedNotes(note);
+                        notesController.deleteNote(note.noteId);
 
                         if (context.mounted) {
                           showSnackBar(
                             context,
-                            message: "Your note has been deleted.",
+                            message: "Your note has been moved to trash bin.",
+                            backgroundColor: Colors.orangeAccent,
+                            textColor: Colors.black,
                           );
                         }
                       },
@@ -152,25 +164,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget showConfirmDeleteDialog() {
-    return AlertDialog(
-      title: Text("Delete Note"),
-      content: Text("Are you sure you want to delete this note?"),
-      actions: [
-        TextButton(
-          onPressed: () async {
-            Get.back(result: true);
-          },
-          style: TextButton.styleFrom(backgroundColor: Colors.red),
-          child: Text("Delete", style: TextStyle(color: Colors.white)),
-        ),
-        TextButton(
-          onPressed: () {
-            Get.back(result: false);
-          },
-          style: TextButton.styleFrom(backgroundColor: Colors.blue),
-          child: Text("Cancel", style: TextStyle(color: Colors.white)),
-        ),
-      ],
+    return showConfirmDialog(
+      context,
+      title: "Delete Note",
+      content: "Are you sure you want to delete this note?",
+      onCancel: () {
+        Get.back(result: false);
+      },
+      onContinue: () async {
+        Get.back(result: true);
+      },
     );
   }
 }

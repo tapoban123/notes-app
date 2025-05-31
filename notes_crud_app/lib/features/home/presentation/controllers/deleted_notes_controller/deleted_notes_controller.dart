@@ -20,13 +20,13 @@ class DeletedNotesController extends GetxController {
        _removeFromDeletedNotes = removeFromDeletedNotes,
        _deleteAllDeletedNotes = deleteAllDeletedNotes;
 
-  final deletedNotes = RxList<NoteEntity>([]);
+  final RxList<NoteEntity> deletedNotes = <NoteEntity>[].obs;
   final fetchingDeletedNotes = RxBool(false);
 
   void addToDeletedNotes(NoteEntity deletedNote) async {
-    final List<NoteEntity> currentList = deletedNotes;
-    currentList.insert(0, deletedNote);
     _addToDeletedNotes.call(deletedNote);
+    final List<NoteEntity> currentList = List.from(deletedNotes);
+    currentList.insert(0, deletedNote);
     deletedNotes.value = currentList;
   }
 
@@ -39,8 +39,9 @@ class DeletedNotesController extends GetxController {
   }
 
   void removeFromDeletedNotes(String noteId) async {
-    final List<NoteEntity> currentList = deletedNotes;
+    final List<NoteEntity> currentList = List.from(deletedNotes);
     _removeFromDeletedNotes.call(noteId);
+    currentList.removeWhere((element) => element.noteId == noteId);
     deletedNotes.value = currentList;
   }
 
