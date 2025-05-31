@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:notes_crud_app/core/utils/utils.dart';
 import 'package:notes_crud_app/features/home/domain/entities/note_entity.dart';
 import 'package:notes_crud_app/features/home/presentation/controllers/notes_controller.dart';
 import 'package:notes_crud_app/features/home/presentation/widgets/note_textfield.dart';
@@ -37,6 +38,11 @@ class _AddOrEditNoteScreenState extends State<AddOrEditNoteScreen> {
     super.initState();
   }
 
+  final dateTimeStyle = TextStyle(
+    fontSize: 11,
+    color: Colors.white.withValues(alpha: 0.5),
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +53,17 @@ class _AddOrEditNoteScreenState extends State<AddOrEditNoteScreen> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 14.0).copyWith(top: 20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            noteData != null && noteData!.updatedAt != null
+                ? Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Text(
+                    "Last Modifed on ${formatDate(DateTime.fromMillisecondsSinceEpoch(noteData!.updatedAt!))} at ${formatTime(DateTime.fromMillisecondsSinceEpoch(noteData!.updatedAt!))}",
+                    style: dateTimeStyle,
+                  ),
+                )
+                : SizedBox.shrink(),
             Form(
               key: _formKey,
               child: Column(
@@ -65,6 +81,28 @@ class _AddOrEditNoteScreenState extends State<AddOrEditNoteScreen> {
                 ],
               ),
             ),
+            noteData != null
+                ? Padding(
+                  padding: EdgeInsets.only(top: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        formatDate(
+                          DateTime.fromMillisecondsSinceEpoch(noteData!.createdAt),
+                        ),
+                        style: dateTimeStyle,
+                      ),
+                      Text(
+                        formatTime(
+                          DateTime.fromMillisecondsSinceEpoch(noteData!.createdAt),
+                        ),
+                        style: dateTimeStyle,
+                      ),
+                    ],
+                  ),
+                )
+                : SizedBox.shrink(),
             SizedBox(height: 50),
             ElevatedButton(
               onPressed: () {
