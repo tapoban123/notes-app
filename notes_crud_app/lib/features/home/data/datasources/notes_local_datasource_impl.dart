@@ -11,9 +11,12 @@ class NotesLocalDatasourceImpl extends NotesLocalDatasource {
   }
 
   @override
-  Future<List<NoteModel>> fetchNotesFromDb() async {
+  Future<List<NoteModel>> fetchNotesFromDb(String? orderBy) async {
     await _initDb();
-    final response = await _sqfliteDb.query(TableNames.notesTable.table);
+    final response = await _sqfliteDb.query(
+      TableNames.notesTable.table,
+      orderBy: orderBy,
+    );
     final List<NoteModel> notes =
         response.map((note) => NoteModel.fromMap(note)).toList();
     print(notes);

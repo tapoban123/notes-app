@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     notesController = Get.find();
-    notesController.fetchAllNotes();
+    notesController.fetchAllNotes(null);
 
     super.initState();
   }
@@ -64,49 +64,55 @@ class _HomeScreenState extends State<HomeScreen> {
         }
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 10),
-          child: ListView.builder(
-            itemCount: notesController.notes.length,
-            itemBuilder: (context, index) {
-              final notesDisplayReversed =  notesController.notes.reversed.toList();
-              final note = notesDisplayReversed[index];
+          child: Column(
+            children: [
+              _SortOptions(notesController: notesController),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: notesController.notes.length,
+                  itemBuilder: (context, index) {
+                    final note = notesController.notes[index];
 
-              return Dismissible(
-                key: Key(note.noteId),
-                background: SizedBox(),
-                direction: DismissDirection.endToStart,
-                secondaryBackground: Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  alignment: Alignment.centerRight,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 16.0),
-                    child: Icon(Icons.delete, color: Colors.red),
-                  ),
-                ),
+                    return Dismissible(
+                      key: Key(note.noteId),
+                      background: SizedBox(),
+                      direction: DismissDirection.endToStart,
+                      secondaryBackground: Container(
+                        width: double.infinity,
+                        height: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 16.0),
+                          child: Icon(Icons.delete, color: Colors.red),
+                        ),
+                      ),
 
-                confirmDismiss: (direction) async {
-                  return await showDialog(
-                    context: context,
-                    builder: (context) => showConfirmDeleteDialog(),
-                  );
-                },
-                onDismissed: (direction) async {
-                  await notesController.deleteNote(note.noteId);
+                      confirmDismiss: (direction) async {
+                        return await showDialog(
+                          context: context,
+                          builder: (context) => showConfirmDeleteDialog(),
+                        );
+                      },
+                      onDismissed: (direction) async {
+                        await notesController.deleteNote(note.noteId);
 
-                  if (context.mounted) {
-                    showSnackBar(
-                      context,
-                      message: "Your note has been deleted.",
+                        if (context.mounted) {
+                          showSnackBar(
+                            context,
+                            message: "Your note has been deleted.",
+                          );
+                        }
+                      },
+                      child: NoteTile(noteData: note),
                     );
-                  }
-                },
-                child: NoteTile(noteData: note),
-              );
-            },
+                  },
+                ),
+              ),
+            ],
           ),
         );
       }),
@@ -133,6 +139,97 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Text("Cancel", style: TextStyle(color: Colors.white)),
         ),
       ],
+    );
+  }
+}
+
+class _SortOptions extends StatefulWidget {
+  final NotesController notesController;
+  const _SortOptions({required this.notesController});
+
+  @override
+  State<_SortOptions> createState() => _SortOptionsState();
+}
+
+class _SortOptionsState extends State<_SortOptions> {
+  final ValueNotifier<int?> selectedOption = ValueNotifier(null);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 12),
+      child: ValueListenableBuilder(
+        valueListenable: selectedOption,
+        builder:
+            (context, selectedOptionValue, child) => Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                sortButton(
+                  index: 0,
+                  buttonName: "Title",
+                  selectedIndex: selectedOptionValue,
+                  onTap: () {
+                    selectedOption.value = 0;
+                    widget.notesController.fetchAllNotes("title");
+                  },
+                ),
+                sortButton(
+                  index: 1,
+                  buttonName: "Creation Time",
+                  selectedIndex: selectedOptionValue,
+                  onTap: () {
+                    selectedOption.value = 1;
+
+                    widget.notesController.fetchAllNotes("createdAt");
+                  },
+                ),
+                sortButton(
+                  index: 2,
+                  buttonName: "Reset",
+                  selectedIndex: selectedOptionValue,
+                  color: Colors.white60,
+                  icon: Icons.restore,
+                  onTap: () {
+                    selectedOption.value = null;
+
+                    widget.notesController.fetchAllNotes(null);
+                  },
+                ),
+              ],
+            ),
+      ),
+    );
+  }
+
+  Widget sortButton({
+    required int index,
+    required String buttonName,
+    int? selectedIndex,
+    IconData icon = Icons.sort,
+    Color? color,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Row(
+        children: [
+          Text(
+            buttonName,
+            style: TextStyle(
+              color:
+                  color ??
+                  (selectedIndex == index ? Colors.white : Colors.white54),
+            ),
+          ),
+          SizedBox(width: 5),
+          Icon(
+            icon,
+            color:
+                color ??
+                (selectedIndex == index ? Colors.white : Colors.white54),
+          ),
+        ],
+      ),
     );
   }
 }

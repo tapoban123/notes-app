@@ -27,7 +27,7 @@ class NotesController extends GetxController {
   void createNote(NoteEntity note) async {
     _insertNoteIntoDb.call(note);
     final List<NoteEntity> currentNotes = List.from(notes);
-    currentNotes.add(note);
+    currentNotes.insert(0, note);
     notes.value = currentNotes;
   }
 
@@ -39,10 +39,14 @@ class NotesController extends GetxController {
     notes.value = currentNotes;
   }
 
-  void fetchAllNotes() async {
+  void fetchAllNotes(String? orderBy) async {
     fetchingNotes.value = true;
-    final fetchNotes = await _fetchAllNotesFromDb.call();
-    notes.value = fetchNotes ?? [];
+    final fetchNotes = await _fetchAllNotesFromDb.call(orderBy);
+    if (orderBy == null) {
+      notes.value = (fetchNotes ?? []).reversed.toList();
+    } else {
+      notes.value = fetchNotes ?? [];
+    }
     fetchingNotes.value = false;
   }
 

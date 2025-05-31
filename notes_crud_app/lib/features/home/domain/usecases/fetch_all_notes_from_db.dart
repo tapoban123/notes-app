@@ -7,7 +7,7 @@ class FetchAllNotesFromDb {
   FetchAllNotesFromDb({required NotesRepository notesRepository})
     : _notesRepository = notesRepository;
 
-  Future<List<NoteEntity>?> call() async {
-    return await _notesRepository.fetchNotesFromDb();
+  Future<List<NoteEntity>?> call(String? orderBy) async {
+    return await _notesRepository.fetchNotesFromDb(orderBy);
   }
 }

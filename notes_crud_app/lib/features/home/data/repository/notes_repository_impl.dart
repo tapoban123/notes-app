@@ -24,9 +24,9 @@ class NotesRepositoryImpl extends NotesRepository {
   }
 
   @override
-  Future<List<NoteEntity>?> fetchNotesFromDb() async {
+  Future<List<NoteEntity>?> fetchNotesFromDb(String? orderBy) async {
     try {
-      final response = await _notesLocalDatasource.fetchNotesFromDb();
+      final response = await _notesLocalDatasource.fetchNotesFromDb(orderBy);
       final List<NoteEntity> notes =
           response.map((note) => NoteEntity.fromMap(note.toMap())).toList();
       return notes;
