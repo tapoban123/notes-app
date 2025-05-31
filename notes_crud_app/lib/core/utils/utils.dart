@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:notes_crud_app/core/responsiveness/responsive.dart';
 
 void showSnackBar(
@@ -31,4 +32,12 @@ Widget showProgressIndicator() {
 
 void showProgressIndicatorDialog(BuildContext context) {
   showDialog(context: context, builder: (context) => showProgressIndicator());
+}
+
+String formatDate(DateTime date) {
+  return DateFormat.yMMMMd().format(date);
+}
+
+String formatTime(DateTime time) {
+  return DateFormat.jm().format(time);
 }

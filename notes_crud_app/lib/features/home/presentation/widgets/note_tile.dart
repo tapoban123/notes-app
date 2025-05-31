@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:notes_crud_app/core/utils/utils.dart';
 import 'package:notes_crud_app/features/home/domain/entities/note_entity.dart';
 import 'package:notes_crud_app/routes.dart';
 
@@ -9,6 +10,11 @@ class NoteTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dateTimeStyle = TextStyle(
+      fontSize: 11,
+      color: Colors.white.withValues(alpha: 0.5),
+    );
+
     return Card(
       margin: EdgeInsets.symmetric(horizontal: 0).copyWith(top: 0, bottom: 10),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -36,10 +42,33 @@ class NoteTile extends StatelessWidget {
             ),
           ],
         ),
-        subtitle: Text(
-          noteData.content,
-          maxLines: 3,
-          overflow: TextOverflow.ellipsis,
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              noteData.content,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+            ),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  formatDate(
+                    DateTime.fromMillisecondsSinceEpoch(noteData.createdAt),
+                  ),
+                  style: dateTimeStyle,
+                ),
+                Text(
+                  formatTime(
+                    DateTime.fromMillisecondsSinceEpoch(noteData.createdAt),
+                  ),
+                  style: dateTimeStyle,
+                ),
+              ],
+            ),
+          ],
         ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),

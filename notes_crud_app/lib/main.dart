@@ -4,7 +4,7 @@ import 'package:notes_crud_app/core/theme/themes.dart';
 import 'package:notes_crud_app/features/home/presentation/screens/home_screen.dart';
 import 'package:notes_crud_app/routes.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
 }
 

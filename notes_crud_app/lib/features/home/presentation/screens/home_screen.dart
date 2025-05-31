@@ -67,7 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
           child: ListView.builder(
             itemCount: notesController.notes.length,
             itemBuilder: (context, index) {
-              final note = notesController.notes[index];
+              final notesDisplayReversed =  notesController.notes.reversed.toList();
+              final note = notesDisplayReversed[index];
 
               return Dismissible(
                 key: Key(note.noteId),
