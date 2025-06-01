@@ -2,6 +2,18 @@
 
 Build a Flutter app for creating, editing, searching, and deleting personal notes. Use GetX for state management, dependency injection, and routing. The app should persist notes locally via SQLite and provide a smooth user experience with reactive UI updates.
 
+## [Source Code](notes_crud_app)
+
+## [Screen Recording](https://drive.google.com/file/d/1OxaGkptvMYXk0j1wUvY5GghCJKkeZcPA/view?usp=sharing)
+
+## [.apk Files](apk_files)
+
+## Tech Stack used:
+- `Getx`
+- `sqflite`
+- `Clean Architecture`
+
+
 ### Requirements:
 
 - Use Flutter + Dart with GetX for state management and navigation
