@@ -10,6 +10,7 @@ void showSnackBar(
   Color? textColor,
   Color? backgroundColor,
 }) {
+  ScaffoldMessenger.of(context).clearSnackBars();
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       behavior: SnackBarBehavior.floating,

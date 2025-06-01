@@ -55,6 +55,7 @@ class _DeletedNotesScreenState extends State<DeletedNotesScreen> {
                           textColor: Colors.white,
                           backgroundColor: Colors.red,
                         );
+                        Get.back();
                       },
                     ),
               );
@@ -85,11 +86,15 @@ class _DeletedNotesScreenState extends State<DeletedNotesScreen> {
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      note.title,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                    SizedBox(
+                      width: 220,
+                      child: Text(
+                        note.title,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     ),
                     Row(
