@@ -4,7 +4,10 @@ Built a Flutter app for creating, editing, searching, and deleting personal note
 
 ## [Source Code](notes_crud_app)
 
-## [Screen Recording](https://drive.google.com/file/d/1OxaGkptvMYXk0j1wUvY5GghCJKkeZcPA/view?usp=sharing)
+## Screen Recording:
+
+https://github.com/user-attachments/assets/a36f66e2-75c7-44b6-b6d9-2c484b95df3b
+
 
 ## [.apk Files](apk_files)
 
